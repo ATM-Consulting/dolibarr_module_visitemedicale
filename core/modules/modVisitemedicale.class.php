@@ -98,7 +98,7 @@ class modVisitemedicale extends DolibarrModules
 
 		// Dependencies
 		$this->hidden = false;			// A condition to hide module
-		$this->depends = array();		// List of modules id that must be enabled if this module is enabled
+		$this->depends = array('modAbricot');		// List of modules id that must be enabled if this module is enabled
 		$this->requiredby = array();	// List of modules id to disable if this one is disabled
 		$this->conflictwith = array();	// List of modules id this module is in conflict with
 		$this->phpmin = array(5,0);					// Minimum version of PHP required by module
@@ -163,7 +163,18 @@ class modVisitemedicale extends DolibarrModules
 
         // Boxes
 		// Add here list of php file(s) stored in core/boxes that contains class to show a box.
-        $this->boxes = array();			// List of boxes
+        $this->boxes = array(
+            array(
+                'file'=>'visitemedicale_box@visitemedicale'
+                ,'note'=>''
+                ,'enabledbydefaulton'=>'Home'
+            )
+            ,array(
+                'file'=>'visitemedicale_box_nearest@visitemedicale'
+                ,'note'=>''
+                ,'enabledbydefaulton'=>'Home'
+            )
+        );			// List of boxes
 		// Example:
 		//$this->boxes=array(array(0=>array('file'=>'myboxa.php','note'=>'','enabledbydefaulton'=>'Home'),1=>array('file'=>'myboxb.php','note'=>''),2=>array('file'=>'myboxc.php','note'=>'')););
 
@@ -249,6 +260,14 @@ class modVisitemedicale extends DolibarrModules
 		$sql = array();
 
 		$result=$this->_load_tables('/visitemedicale/sql/');
+
+        define('INC_FROM_DOLIBARR',true);
+        dol_include_once('/visitemedicale/config.php');
+        
+        $PDOdb=new TPDOdb;
+        
+        $o=new TVisiteMedicale;
+        $o->init_db_by_vars($PDOdb);
 
 		return $this->_init($sql, $options);
 	}

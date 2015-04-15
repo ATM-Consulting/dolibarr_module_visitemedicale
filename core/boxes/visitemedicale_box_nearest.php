@@ -27,10 +27,10 @@ include_once DOL_DOCUMENT_ROOT . "/core/boxes/modules_boxes.php";
 /**
  * Class to manage the box
  */
-class visitemedicale_box extends ModeleBoxes
+class visitemedicale_box_nearest extends ModeleBoxes
 {
 
-    public $boxcode = "visitemedicale2";
+    public $boxcode = "visitemedicale1";
     public $boximg = "visitemedicale@visitemedicale";
     public $boxlabel;
     public $depends = array("visitemedicale");
@@ -47,7 +47,7 @@ class visitemedicale_box extends ModeleBoxes
         global $langs;
         $langs->load("boxes");
 
-        $this->boxlabel = $langs->transnoentitiesnoconv("VisitesMedicalesToPlannif");
+        $this->boxlabel = $langs->transnoentitiesnoconv("VisitesMedicalesPlannif");
     }
 
     /**
@@ -64,7 +64,7 @@ class visitemedicale_box extends ModeleBoxes
 
         //include_once DOL_DOCUMENT_ROOT . "/visitemedicale/class/visitemedicale.class.php";
 
-        $text = $langs->trans("VisitesMedicalesToPlannifDescrip", $max);
+        $text = $langs->trans("VisitesMedicalesPlannifDescrip", $max);
         $this->info_box_head = array(
             'text' => $text,
             'limit' => dol_strlen($text)
