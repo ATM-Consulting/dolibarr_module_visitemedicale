@@ -169,11 +169,7 @@ class modVisitemedicale extends DolibarrModules
                 ,'note'=>''
                 ,'enabledbydefaulton'=>'Home'
             )
-            ,array(
-                'file'=>'visitemedicale_box_nearest@visitemedicale'
-                ,'note'=>''
-                ,'enabledbydefaulton'=>'Home'
-            )
+           
         );			// List of boxes
 		// Example:
 		//$this->boxes=array(array(0=>array('file'=>'myboxa.php','note'=>'','enabledbydefaulton'=>'Home'),1=>array('file'=>'myboxb.php','note'=>''),2=>array('file'=>'myboxc.php','note'=>'')););
