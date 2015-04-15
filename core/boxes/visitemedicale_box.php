@@ -69,6 +69,7 @@ class visitemedicale_box extends ModeleBoxes
         $this->info_box_head = array(
             'text' => $text,
             'limit' => dol_strlen($text)
+            
         );
 
         define('INC_FROM_DOLIBARR',true);
@@ -98,19 +99,19 @@ class visitemedicale_box extends ModeleBoxes
           
             if($t_last>time() && $t_last<strtotime("+2month")) {
                 $date = date('d/m/Y', $t_last);
-                $url=dol_buildpath('/visitemedicale/visitemedicale.php?action=load_last&fk_user='.$u->id);
+                $url=dol_buildpath('/visitemedicale/visitemedicale.php?action=load_last&fk_user='.$u->id,1);
                 $statut = img_picto('','statut4');
             }
             else if($t_next<strtotime("+2month") ) { // la prochaine visite est dans moins de 2 mois
                 
                 if($t_next<time()) {
                     $date="En retard !";
-                    $url=dol_buildpath('/visitemedicale/visitemedicale.php?action=new&fk_user='.$u->id);
+                    $url=dol_buildpath('/visitemedicale/visitemedicale.php?action=new&fk_user='.$u->id,1);
                     $statut = img_picto('','statut8');
                 }
                 else{
                     $date = date('d/m/Y', $t_next);
-                    $url=dol_buildpath('/visitemedicale/visitemedicale.php?action=new&fk_user='.$u->id);
+                    $url=dol_buildpath('/visitemedicale/visitemedicale.php?action=new&fk_user='.$u->id,1);
                     $statut = img_picto('','statut0');    
                 }
                 
@@ -141,6 +142,13 @@ class visitemedicale_box extends ModeleBoxes
             );
             
         }
+
+        $this->info_box_contents[] =array(
+                   array( 
+                    'td' => 'align="right" colspan="3"',
+                    'text' => "Gérer les visites médicales",
+                    'url' => dol_buildpath('/visitemedicale/visitemedicale.php',1)
+                   ));
         
     }
 
