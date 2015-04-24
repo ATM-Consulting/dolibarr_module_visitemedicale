@@ -61,95 +61,99 @@ class visitemedicale_box extends ModeleBoxes
     {
         global $conf, $user, $langs, $db;
 
-        $this->max = $max;
+		if ($user->rights->visitemedicale->read_all || $user->rights->visitemedicale->read_own) {
+			$this->max = $max;
 
-        //include_once DOL_DOCUMENT_ROOT . "/visitemedicale/class/visitemedicale.class.php";
-
-        $text = $langs->trans("VisitesMedicalesToPlannifDescrip", $max);
-        $this->info_box_head = array(
-            'text' => $text,
-            'limit' => dol_strlen($text)
-            
-        );
-
-        define('INC_FROM_DOLIBARR',true);
-        dol_include_once('/visitemedicale/config.php');
-
-        $PDOdb=new TPDOdb;
-        $Tab = $PDOdb->ExecuteAsArray("SELECT u.rowid as fk_user 
-        ,(SELECT MAX(date_next_visite) FROM ".MAIN_DB_PREFIX."visitemedicale
-            WHERE fk_user=u.rowid
-        ) as date_next
-        ,(SELECT MAX(date_visite) FROM ".MAIN_DB_PREFIX."visitemedicale
-            WHERE fk_user=u.rowid
-        ) as date_last
-        
-        FROM ".MAIN_DB_PREFIX."user u WHERE statut=1 
-        ");
-
-        $this->info_box_contents=array();
-
-        foreach($Tab as $row) {
-            $u=new User($db);
-            $u->fetch($row->fk_user);
-                      
-            $t_next = strtotime($row->date_next);
-            $t_last = strtotime($row->date_last);
-            
-          
-            if($t_last>time() && $t_last<strtotime("+2month")) {
-                $date = date('d/m/Y', $t_last);
-                $url=dol_buildpath('/visitemedicale/visitemedicale.php?action=load_last&fk_user='.$u->id,1);
-                $statut = img_picto('','statut4');
-            }
-            else if($t_next<strtotime("+2month") ) { // la prochaine visite est dans moins de 2 mois
-                
-                if($t_next<time()) {
-                    $date="En retard !";
-                    $url=dol_buildpath('/visitemedicale/visitemedicale.php?action=new&fk_user='.$u->id,1);
-                    $statut = img_picto('','statut8');
-                }
-                else{
-                    $date = date('d/m/Y', $t_next);
-                    $url=dol_buildpath('/visitemedicale/visitemedicale.php?action=new&fk_user='.$u->id.'&date_visite='.$date,1);
-                    $statut = img_picto('','statut0');    
-                }
-                
-                
-            }   
-            else{
-                continue;
-            }       
-                      
-            $this->info_box_contents[] = array(
-                array(
-                    'td' => 'align="left"'
-                    ,'text' => $u->getFullName($langs)
-                    ,'url'=>dol_buildpath('/user/card.php?id='.$u->id,1)
-                    ,'logo'=>'user'
-                )
-                ,array(
-                    'td' => 'align="right"'
-                    ,'text' =>$date 
-                    ,'url'=>$url
-                )
-                ,array(
-                    'td' => 'align="left"'
-                    ,'text' =>$statut
-                    ,'url'=>''
-                    
-                )
-            );
-            
-        }
-
-        $this->info_box_contents[] =array(
-                   array( 
-                    'td' => 'align="right" colspan="3"',
-                    'text' => "Gérer les visites médicales",
-                    'url' => dol_buildpath('/visitemedicale/visitemedicale.php',1)
-                   ));
-        
+	        //include_once DOL_DOCUMENT_ROOT . "/visitemedicale/class/visitemedicale.class.php";
+	
+	        $text = $langs->trans("VisitesMedicalesToPlannifDescrip", $max);
+	        $this->info_box_head = array(
+	            'text' => $text,
+	            'limit' => dol_strlen($text)
+	            
+	        );
+	
+	        define('INC_FROM_DOLIBARR',true);
+	        dol_include_once('/visitemedicale/config.php');
+	
+	        $PDOdb=new TPDOdb;
+	        $Tab = $PDOdb->ExecuteAsArray("SELECT u.rowid as fk_user 
+	        ,(SELECT MAX(date_next_visite) FROM ".MAIN_DB_PREFIX."visitemedicale
+	            WHERE fk_user=u.rowid
+	        ) as date_next
+	        ,(SELECT MAX(date_visite) FROM ".MAIN_DB_PREFIX."visitemedicale
+	            WHERE fk_user=u.rowid
+	        ) as date_last
+	        
+	        FROM ".MAIN_DB_PREFIX."user u WHERE statut=1 
+	        ");
+	
+	        $this->info_box_contents=array();
+	
+	        foreach($Tab as $row) {
+	            $u=new User($db);
+	            $u->fetch($row->fk_user);
+	            
+				if ($user->rights->visitemedicale->read_own && !$user->rights->visitemedicale->read_all && $u->id != $user->id)
+					continue;
+				
+	            $t_next = strtotime($row->date_next);
+	            $t_last = strtotime($row->date_last);
+	            
+	          
+	            if($t_last>time() && $t_last<strtotime("+2month")) {
+	                $date = date('d/m/Y', $t_last);
+	                $url=dol_buildpath('/visitemedicale/visitemedicale.php?action=load_last&fk_user='.$u->id,1);
+	                $statut = img_picto('','statut4');
+	            }
+	            else if($t_next<strtotime("+2month") ) { // la prochaine visite est dans moins de 2 mois
+	                
+	                if($t_next<time()) {
+	                    $date="En retard !";
+	                    $url=dol_buildpath('/visitemedicale/visitemedicale.php?action=new&fk_user='.$u->id,1);
+	                    $statut = img_picto('','statut8');
+	                }
+	                else{
+	                    $date = date('d/m/Y', $t_next);
+	                    $url=dol_buildpath('/visitemedicale/visitemedicale.php?action=new&fk_user='.$u->id.'&date_visite='.$date,1);
+	                    $statut = img_picto('','statut0');    
+	                }
+	                
+	                
+	            }   
+	            else{
+	                continue;
+	            }       
+	                      
+	            $this->info_box_contents[] = array(
+	                array(
+	                    'td' => 'align="left"'
+	                    ,'text' => $u->getFullName($langs)
+	                    ,'url'=>dol_buildpath('/user/card.php?id='.$u->id,1)
+	                    ,'logo'=>'user'
+	                )
+	                ,array(
+	                    'td' => 'align="right"'
+	                    ,'text' =>$date 
+	                    ,'url'=>$url
+	                )
+	                ,array(
+	                    'td' => 'align="left"'
+	                    ,'text' =>$statut
+	                    ,'url'=>''
+	                    
+	                )
+	            );
+	            
+	        }
+	
+	        $this->info_box_contents[] =array(
+	                   array( 
+	                    'td' => 'align="right" colspan="3"',
+	                    'text' => "Gérer les visites médicales",
+	                    'url' => dol_buildpath('/visitemedicale/visitemedicale.php',1)
+	                   ));
+		}
     }
 
     /**
