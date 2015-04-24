@@ -177,7 +177,7 @@ function _fiche_visite(&$PDOdb, &$visite, $mode = 'view') {
 				'rowid' => $visite->rowid,
 				'user' => ($mode == 'new' ? $form->combo('', 'fk_user', $TUsers, $visite->fk_user) : $usr->getnomurl(1)),
 				'date_visite' => $form->calendrier('', 'date_visite', date('d/m/Y', $visite->date_visite), 12, 12) . ' ' . $form->timepicker('', 'horaire_date_visite', date('H:i', $visite->date_visite), 12, 12),
-				'delai_next_visite' => $form->texte('', 'delai_next_visite', $visite->delai_next_visite, 3, 255),
+				'delai_next_visite' => $form->texte('', 'delai_next_visite', (!empty($visite->delai_next_visite) ? $visite->delai_next_visite : '0'), 3, 255),
 				'date_next_visite' => $form->calendrier('', 'date_next_visite', date('d/m/Y', $visite->date_next_visite), 12, 12) . ' ' . $form->timepicker('', 'horaire_date_next_visite', date('H:i', $visite->date_next_visite), 12, 12),
 				'type' => $form->combo('', 'type', $visite->TType, $visite->type),
 				'personnel' => $form->combo('', 'personnel', $visite->TPersonnel, $visite->personnel),
