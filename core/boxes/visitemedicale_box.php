@@ -86,7 +86,7 @@ class visitemedicale_box extends ModeleBoxes
         
         FROM ".MAIN_DB_PREFIX."user u WHERE statut=1 
         ");
-        
+
         $this->info_box_contents=array();
 
         foreach($Tab as $row) {
@@ -111,7 +111,7 @@ class visitemedicale_box extends ModeleBoxes
                 }
                 else{
                     $date = date('d/m/Y', $t_next);
-                    $url=dol_buildpath('/visitemedicale/visitemedicale.php?action=new&fk_user='.$u->id,1);
+                    $url=dol_buildpath('/visitemedicale/visitemedicale.php?action=new&fk_user='.$u->id.'&date_visite='.$date,1);
                     $statut = img_picto('','statut0');    
                 }
                 

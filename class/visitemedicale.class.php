@@ -6,6 +6,7 @@ class TVisiteMedicale extends TObjetStd {
          
         parent::set_table(MAIN_DB_PREFIX.'visitemedicale');
         parent::add_champs('date_visite,date_next_visite','type=date;index;');
+		parent::add_champs('delai', 'type=integer;');
         parent::add_champs('type,personnel','type=chaine;');
         parent::add_champs('commentaire','type=text;');
         parent::add_champs('fk_user','type=entier;index;');
