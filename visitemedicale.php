@@ -141,7 +141,7 @@ function _fiche_visite(&$PDOdb, &$visite, $mode = 'view') {
 	
 	if ($mode == 'new') {
 		$sql = '
-			SELECT rowid, lastname
+			SELECT rowid, firstname, lastname
 			FROM ' . MAIN_DB_PREFIX . 'user 
 		';
 		
@@ -153,7 +153,7 @@ function _fiche_visite(&$PDOdb, &$visite, $mode = 'view') {
 		
 		$TUsers = array();
 		foreach ($Tab as $u) {
-			$TUsers[$u->rowid] = $u->lastname;
+			$TUsers[$u->rowid] = utf8_encode($u->firstname) . ' ' . utf8_encode($u->lastname);
 		}
 	}
 	
