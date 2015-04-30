@@ -240,7 +240,6 @@ function _liste_visites(&$PDOdb) {
 		)
 		,'subQuery' => array()
 		,'link' => array(
-			'user_id' => '<a href="' . DOL_URL_ROOT . '/user/fiche.php?id=@val@">@firstname@ @lastname@</a>',
 			'visite_id' => '<a href="' . dol_buildpath('/visitemedicale/visitemedicale.php?action=view&id=@visite_id@"', 1) . '>@date_visite@</a>'
 		)
 		,'translate' => array()
@@ -264,6 +263,7 @@ function _liste_visites(&$PDOdb) {
 			,'personnel' => 'Personnel'
 		)
 		,'eval' => array(
+			'user_id' => '_get_user_link("@firstname@", "@lastname@")',
 			'type' => '_get_libelle_categorie("type_visite", @val@)',
 			'personnel' => '_get_libelle_categorie("type_personnel", @val@)'
 		)
@@ -274,6 +274,25 @@ function _liste_visites(&$PDOdb) {
 		 print '<a class="butAction" href="visitemedicale.php?action=new">Créer une visite médicale</a>';
 		 print '</div>';
 	}
+}
+
+function _get_user_link($firstname, $lastname) {
+	global $db;
+	
+	$sql = '
+		SELECT rowid
+		FROM ' . MAIN_DB_PREFIX . 'user
+		WHERE firstname = "' . utf8_encode($firstname) . '"
+		AND lastname = "' . utf8_encode($lastname) . '"
+	';
+	
+	$dataset = $db->query($sql);
+	$result = $db->fetch_object($dataset);
+	
+	$u = new User($db);
+	$u->fetch($result->rowid);
+	
+	return $u->getNomUrl(1);
 }
 
 function _get_libelle_categorie ($categorie, $valeur) {
