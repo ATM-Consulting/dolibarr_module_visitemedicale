@@ -129,7 +129,7 @@ class visitemedicale_box extends ModeleBoxes
 	                array(
 	                    'td' => 'align="left"'
 	                    ,'text' => $u->getFullName($langs)
-	                    ,'url'=>dol_buildpath('/user/card.php?id='.$u->id,1)
+	                    ,'url'=>dol_buildpath('/user/fiche.php?id='.$u->id,1)
 	                    ,'logo'=>'user'
 	                )
 	                ,array(

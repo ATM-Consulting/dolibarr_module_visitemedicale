@@ -1,6 +1,5 @@
 <?php
 require 'config.php';
-require_once 'class/visitemedicale.class.php';
 require_once 'lib/visitemedicale.lib.php';
 
 global $user, $langs;
@@ -203,7 +202,7 @@ function _fiche_visite(&$PDOdb, &$visite, $mode = 'view') {
 			}
 			
 			if ($user->rights->visitemedicale->delete)
-				echo '<a href="visitemedicale.php?action=delete&id=' . $visite->rowid . '" class="butActionDelete" style="margin: 0 32px;">Supprimer</a>';
+				echo '<a href="visitemedicale.php?action=delete&id=' . $visite->rowid . '" class="butActionDelete">Supprimer</a>';
 		}
 		
 	echo '</div>';
@@ -242,7 +241,7 @@ function _liste_visites(&$PDOdb) {
 		,'subQuery' => array()
 		,'link' => array(
 			'user_id' => '<a href="' . DOL_URL_ROOT . '/user/fiche.php?id=@val@">@lastname@</a>',
-			'visite_id' => '<a href="' . DOL_URL_ROOT . '/custom/visitemedicale/visitemedicale.php?action=view&id=@visite_id@">@date_visite@</a>'
+			'visite_id' => '<a href="' . dol_buildpath('/visitemedicale/visitemedicale.php?action=view&id=@visite_id@"', 1) . '>@date_visite@</a>'
 		)
 		,'translate' => array()
 		,'hide' => $THide
