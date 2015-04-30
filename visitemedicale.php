@@ -220,10 +220,10 @@ function _liste_visites(&$PDOdb) {
 	$visite = new TVisiteMedicale;
 	$r = new TSSRenderControler($visite);
 
-	$THide = array('lastname', 'date_visite');
+	$THide = array('firstname', 'lastname', 'date_visite');
 	
 	$sql = '
-		SELECT user.lastname, user.rowid as user_id, DATE_FORMAT(date_visite, "%d/%m/%Y %H:%i") AS date_visite, visitemedicale.rowid as visite_id, date_next_visite, type, personnel
+		SELECT user.firstname, user.lastname, user.rowid as user_id, DATE_FORMAT(date_visite, "%d/%m/%Y %H:%i") AS date_visite, visitemedicale.rowid as visite_id, date_next_visite, type, personnel
 		FROM ' . MAIN_DB_PREFIX . 'visitemedicale as visitemedicale
 		INNER JOIN ' . MAIN_DB_PREFIX . 'user as user ON user.rowid = visitemedicale.fk_user 
 	';
@@ -240,7 +240,7 @@ function _liste_visites(&$PDOdb) {
 		)
 		,'subQuery' => array()
 		,'link' => array(
-			'user_id' => '<a href="' . DOL_URL_ROOT . '/user/fiche.php?id=@val@">@lastname@</a>',
+			'user_id' => '<a href="' . DOL_URL_ROOT . '/user/fiche.php?id=@val@">@firstname@ @lastname@</a>',
 			'visite_id' => '<a href="' . dol_buildpath('/visitemedicale/visitemedicale.php?action=view&id=@visite_id@"', 1) . '>@date_visite@</a>'
 		)
 		,'translate' => array()
