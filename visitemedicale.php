@@ -22,7 +22,7 @@ switch ($action) {
 		
 		$visite = new TVisiteMedicale;
 		
-		if (!empty(__get('date_visite'))) {
+		if (__get('date_visite')) {
 			$visite->date_visite = strtotime(str_replace('/', '-', __get('date_visite')));
 		}
 		
