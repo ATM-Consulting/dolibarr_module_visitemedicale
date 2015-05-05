@@ -139,24 +139,6 @@ function _fiche_visite(&$PDOdb, &$visite, $mode = 'view') {
 		$usr->fetch($visite->fk_user);
 	}
 	
-	if ($mode == 'new') {
-		$sql = '
-			SELECT rowid, firstname, lastname
-			FROM ' . MAIN_DB_PREFIX . 'user 
-		';
-		
-		if (!$user->rights->visitemedicale->read_all) {
-			$sql .= ' WHERE rowid = ' . $user->id . ' ';
-		}
-		
-		$Tab = $PDOdb->ExecuteAsArray($sql);
-		
-		$TUsers = array();
-		foreach ($Tab as $u) {
-			$TUsers[$u->rowid] = utf8_encode($u->firstname) . ' ' . utf8_encode($u->lastname);
-		}
-	}
-	
 	$f = new Form($db);
 	$form=new TFormCore($_SERVER['PHP_SELF'], 'form_visite' ,'POST');
 	$form->Set_typeaff($mode);
@@ -174,7 +156,7 @@ function _fiche_visite(&$PDOdb, &$visite, $mode = 'view') {
 		array(
 			'visite' => array(
 				'rowid' => $visite->rowid,
-				'user' => ($mode == 'new' ? $form->combo('', 'fk_user', $TUsers, $visite->fk_user) : $usr->getnomurl(1)),
+				'user' => ($mode == 'new' ? $f->select_dolusers($user->id, 'fk_user') : $usr->getnomurl(1)),
 				'date_visite' => $form->calendrier('', 'date_visite', date('d/m/Y', $visite->date_visite), 12, 12) . ' ' . $form->timepicker('', 'horaire_date_visite', date('H:i', $visite->date_visite), 12, 12),
 				'delai_next_visite' => $form->texte('', 'delai_next_visite', (!empty($visite->delai_next_visite) ? $visite->delai_next_visite : '0'), 3, 255),
 				'date_next_visite' => $form->calendrier('', 'date_next_visite', date('d/m/Y', $visite->date_next_visite), 12, 12) . ' ' . $form->timepicker('', 'horaire_date_next_visite', date('H:i', $visite->date_next_visite), 12, 12),
